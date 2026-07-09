@@ -42,6 +42,18 @@ export const updateResume = (id, formData) => async (dispatch) => {
   return data.resume;
 };
 
+// NEW: upload/replace this resume's own photo
+export const updateResumeAvatar = (id, avatarBase64) => async (dispatch) => {
+  const { data } = await axios.put(
+    `${server}/resume/${id}/update-avatar`,
+    { avatar: avatarBase64 },
+    { withCredentials: true }
+  );
+  dispatch({ type: "UpdateResumeSuccess", payload: data.resume });
+  return data.resume;
+};
+
+
 export const deleteResume = (id) => async (dispatch) => {
   await axios.delete(`${server}/resume/${id}`, { withCredentials: true });
   dispatch({ type: "DeleteResumeSuccess", payload: id });

@@ -76,8 +76,8 @@ const Profile = () => {
                       isLogout
                         ? "text-red-600 hover:bg-red-50"
                         : active
-                        ? "bg-cyan-50 text-cyan-700"
-                        : "text-slate-500 hover:bg-slate-100 hover:text-slate-800"
+                          ? "bg-cyan-50 text-cyan-700"
+                          : "text-slate-500 hover:bg-slate-100 hover:text-slate-800"
                     }`}
                   >
                     {active && (
@@ -142,7 +142,7 @@ const ProfileInfoForm = () => {
         await axios.put(
           `${server}/user/update-avatar`,
           { avatar: base64 },
-          { withCredentials: true }
+          { withCredentials: true },
         );
         toast.success("Photo updated!");
         dispatch(loadUser());
@@ -162,7 +162,7 @@ const ProfileInfoForm = () => {
       await axios.put(
         `${server}/user/update-user-info`,
         { name, email, phoneNumber },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       toast.success("Profile updated!");
       dispatch(loadUser());
@@ -175,7 +175,9 @@ const ProfileInfoForm = () => {
 
   return (
     <div>
-      <h2 className="text-lg font-bold text-slate-900 mb-1">Profile Information</h2>
+      <h2 className="text-lg font-bold text-slate-900 mb-1">
+        Profile Information
+      </h2>
 
       <div className="flex items-center gap-4 mb-8">
         <span className="w-16 h-16 rounded-full overflow-hidden bg-slate-100 border border-slate-200 flex items-center justify-center">
@@ -255,7 +257,6 @@ const ProfileInfoForm = () => {
   );
 };
 
-
 const PasswordField = ({
   label,
   value,
@@ -284,7 +285,11 @@ const PasswordField = ({
         onClick={() => onToggleVisible(field)}
         className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-cyan-600"
       >
-        {visible ? <AiOutlineEye size={20} /> : <AiOutlineEyeInvisible size={20} />}
+        {visible ? (
+          <AiOutlineEye size={20} />
+        ) : (
+          <AiOutlineEyeInvisible size={20} />
+        )}
       </button>
     </div>
   </div>
@@ -294,7 +299,11 @@ const PasswordForm = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [visible, setVisible] = useState({ old: false, new: false, confirm: false });
+  const [visible, setVisible] = useState({
+    old: false,
+    new: false,
+    confirm: false,
+  });
   const [saving, setSaving] = useState(false);
 
   const toggleVisible = (field) =>
@@ -313,7 +322,7 @@ const PasswordForm = () => {
       const res = await axios.put(
         `${server}/user/update-user-password`,
         { oldPassword, newPassword, confirmPassword },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       toast.success(res.data.message || "Password updated!");
       setOldPassword("");
