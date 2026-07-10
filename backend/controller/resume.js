@@ -49,7 +49,6 @@ router.get(
     });
   })
 );
-
 // get one resume by id
 router.get(
   "/:id",

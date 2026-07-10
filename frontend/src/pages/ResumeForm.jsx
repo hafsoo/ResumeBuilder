@@ -83,7 +83,6 @@ const ResumeForm = () => {
     sessionStorage.setItem(`resume-step-${id}`, stepIndex);
   }, [stepIndex, id]);
 
-  /* ---------- validation ---------- */
   const validateStep = useCallback(
     (stepId) => {
       if (stepId === "personal") {
@@ -123,6 +122,12 @@ const ResumeForm = () => {
             });
             return false;
           }
+          if (!e.isPresent && e.endDate && e.endDate < e.startDate) {
+            toast.error(`Education #${i + 1}: end date can't be before start date`, {
+              toastId: "err-education-date-order",
+            });
+            return false;
+          }
         }
         return true;
       }
@@ -133,6 +138,12 @@ const ResumeForm = () => {
           if (!e.company?.trim() || !e.position?.trim() || !e.startDate?.trim()) {
             toast.error(`Experience #${i + 1}: company, position, and start date are required`, {
               toastId: "err-experience-fields",
+            });
+            return false;
+          }
+          if (!e.isPresent && e.endDate && e.endDate < e.startDate) {
+            toast.error(`Experience #${i + 1}: end date can't be before start date`, {
+              toastId: "err-experience-date-order",
             });
             return false;
           }
@@ -254,7 +265,6 @@ const ResumeForm = () => {
         </div>
 
         <div className="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-start">
-          {/* ---------- left column: the form ---------- */}
           <div>
             <div className="mb-8">
               <div className="flex items-center justify-between mb-2">
@@ -306,7 +316,6 @@ const ResumeForm = () => {
               </div>
             </div>
 
-            {/* active step content */}
             <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
               {currentStep === "personal" && (
                 <PersonalInfoStep
@@ -376,7 +385,6 @@ const ResumeForm = () => {
             </div>
           </div>
 
-          {/* ---------- right column: live preview (desktop only) ---------- */}
           <div className="hidden lg:block sticky top-8 self-start">
             <div className="bg-white border border-slate-200 rounded-2xl shadow-sm px-8 py-10 max-h-[calc(100vh-4rem)] overflow-y-auto">
               <ResumePreviewContent
@@ -395,7 +403,6 @@ const ResumeForm = () => {
   );
 };
 
-/* ---------- shared small input ---------- */
 const Field = ({ label, value, onChange, placeholder, type = "text", area }) => (
   <div>
     <label className="block text-sm font-medium text-slate-700 mb-1.5">
@@ -421,7 +428,22 @@ const Field = ({ label, value, onChange, placeholder, type = "text", area }) => 
   </div>
 );
 
-/* ---------- Step 1: Personal Info (now includes resume photo upload) ---------- */
+/* month/year date picker used for start/end dates in Education and Experience */
+const DateField = ({ label, value, onChange, disabled }) => (
+  <div>
+    <label className="block text-sm font-medium text-slate-700 mb-1.5">
+      {label}
+    </label>
+    <input
+      type="month"
+      value={value || ""}
+      onChange={onChange}
+      disabled={disabled}
+      className="w-full px-4 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-900 outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/40 transition disabled:bg-slate-100 disabled:text-slate-400"
+    />
+  </div>
+);
+
 const PersonalInfoStep = ({ data, onChange, avatarUrl, resumeId, onAvatarUploaded }) => {
   const dispatch = useDispatch();
   const [uploading, setUploading] = useState(false);
@@ -462,7 +484,6 @@ const PersonalInfoStep = ({ data, onChange, avatarUrl, resumeId, onAvatarUploade
         Fields marked * are required to save your resume.
       </p>
 
-      {/* resume-specific photo upload */}
       <div className="flex items-center gap-4 mb-6">
         <label className="relative cursor-pointer group shrink-0">
           {avatarUrl ? (
@@ -524,7 +545,6 @@ const PersonalInfoStep = ({ data, onChange, avatarUrl, resumeId, onAvatarUploade
   );
 };
 
-/* ---------- generic repeatable-section helper ---------- */
 const RepeatableSection = ({ title, subtitle, items, onChange, emptyItem, renderFields, addLabel }) => {
   const updateItem = (index, updated) => {
     const next = [...items];
@@ -573,7 +593,6 @@ const RepeatableSection = ({ title, subtitle, items, onChange, emptyItem, render
   );
 };
 
-/* ---------- Step 2: Education ---------- */
 const EducationStep = ({ data, onChange }) => (
   <RepeatableSection
     title="Education"
@@ -581,20 +600,38 @@ const EducationStep = ({ data, onChange }) => (
     items={data}
     onChange={onChange}
     addLabel="Add education"
-    emptyItem={{ degree: "", institute: "", startDate: "", endDate: "", cgpa: "" }}
+    emptyItem={{ degree: "", institute: "", startDate: "", endDate: "", isPresent: false, cgpa: "" }}
     renderFields={(item, update) => (
       <div className="grid sm:grid-cols-2 gap-4 pr-16">
         <Field label="Degree *" value={item.degree} onChange={(e) => update({ ...item, degree: e.target.value })} placeholder="BS Computer Science" />
         <Field label="Institute *" value={item.institute} onChange={(e) => update({ ...item, institute: e.target.value })} placeholder="University name" />
-        <Field label="Start date *" value={item.startDate} onChange={(e) => update({ ...item, startDate: e.target.value })} placeholder="2021" />
-        <Field label="End date" value={item.endDate} onChange={(e) => update({ ...item, endDate: e.target.value })} placeholder="2025 or Present" />
+        <DateField
+          label="Start date *"
+          value={item.startDate}
+          onChange={(e) => update({ ...item, startDate: e.target.value })}
+        />
+        <div>
+          <DateField
+            label="End date"
+            value={item.isPresent ? "" : item.endDate}
+            disabled={item.isPresent}
+            onChange={(e) => update({ ...item, endDate: e.target.value })}
+          />
+          <label className="flex items-center gap-2 mt-2 text-xs text-slate-600">
+            <input
+              type="checkbox"
+              checked={!!item.isPresent}
+              onChange={(e) => update({ ...item, isPresent: e.target.checked, endDate: "" })}
+            />
+            Currently studying here
+          </label>
+        </div>
         <Field label="CGPA" value={item.cgpa} onChange={(e) => update({ ...item, cgpa: e.target.value })} placeholder="3.8/4.0" />
       </div>
     )}
   />
 );
 
-/* ---------- Step 3: Experience ---------- */
 const ExperienceStep = ({ data, onChange }) => (
   <RepeatableSection
     title="Experience"
@@ -602,13 +639,32 @@ const ExperienceStep = ({ data, onChange }) => (
     items={data}
     onChange={onChange}
     addLabel="Add experience"
-    emptyItem={{ company: "", position: "", startDate: "", endDate: "", description: "" }}
+    emptyItem={{ company: "", position: "", startDate: "", endDate: "", isPresent: false, description: "" }}
     renderFields={(item, update) => (
       <div className="grid sm:grid-cols-2 gap-4 pr-16">
         <Field label="Company *" value={item.company} onChange={(e) => update({ ...item, company: e.target.value })} placeholder="Company name" />
         <Field label="Position *" value={item.position} onChange={(e) => update({ ...item, position: e.target.value })} placeholder="Frontend Developer" />
-        <Field label="Start date *" value={item.startDate} onChange={(e) => update({ ...item, startDate: e.target.value })} placeholder="Jan 2023" />
-        <Field label="End date" value={item.endDate} onChange={(e) => update({ ...item, endDate: e.target.value })} placeholder="Present" />
+        <DateField
+          label="Start date *"
+          value={item.startDate}
+          onChange={(e) => update({ ...item, startDate: e.target.value })}
+        />
+        <div>
+          <DateField
+            label="End date"
+            value={item.isPresent ? "" : item.endDate}
+            disabled={item.isPresent}
+            onChange={(e) => update({ ...item, endDate: e.target.value })}
+          />
+          <label className="flex items-center gap-2 mt-2 text-xs text-slate-600">
+            <input
+              type="checkbox"
+              checked={!!item.isPresent}
+              onChange={(e) => update({ ...item, isPresent: e.target.checked, endDate: "" })}
+            />
+            Currently working here
+          </label>
+        </div>
         <div className="sm:col-span-2">
           <Field label="Description" value={item.description} onChange={(e) => update({ ...item, description: e.target.value })} placeholder="What did you work on?" area />
         </div>
@@ -617,7 +673,6 @@ const ExperienceStep = ({ data, onChange }) => (
   />
 );
 
-/* ---------- Step 4: Skills ---------- */
 const SkillsStep = ({ data, onChange }) => {
   const [input, setInput] = useState("");
 
@@ -681,7 +736,6 @@ const SkillsStep = ({ data, onChange }) => {
   );
 };
 
-/* ---------- Step 5: Projects ---------- */
 const ProjectsStep = ({ data, onChange }) => (
   <RepeatableSection
     title="Projects"
