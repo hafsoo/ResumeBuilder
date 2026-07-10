@@ -1,5 +1,4 @@
 import React from "react";
-
 // converts "2023-01" -> "Jan 2023"
 const formatMonth = (value) => {
   if (!value) return "";
@@ -9,7 +8,6 @@ const formatMonth = (value) => {
   const date = new Date(Number(year), Number(month) - 1);
   return date.toLocaleString("en-US", { month: "short", year: "numeric" });
 };
-
 const formatRange = (startDate, endDate, isPresent) => {
   const start = formatMonth(startDate);
   const end = isPresent ? "Present" : formatMonth(endDate);
@@ -17,7 +15,6 @@ const formatRange = (startDate, endDate, isPresent) => {
   if (!end) return start;
   return `${start} – ${end}`;
 };
-
 // ensures links open correctly even if user typed "linkedin.com/..." without https://
 const normalizeUrl = (url) => {
   if (!url) return "";
