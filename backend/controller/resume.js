@@ -5,7 +5,6 @@ const cloudinary = require("cloudinary"); // NEW
 const ErrorHandler = require("../utils/ErrorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const { isAuthenticated } = require("../middleware/auth");
-
 // create a new resume
 router.post(
   "/create",
