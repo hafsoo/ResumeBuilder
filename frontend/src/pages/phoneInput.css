@@ -1,0 +1,35 @@
+/* Makes react-phone-number-input match the rest of the profile form's
+   Tailwind styling (rounded-lg border-slate-300, cyan focus ring) */
+
+.profile-phone-input {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid #cbd5e1; /* border-slate-300 */
+  border-radius: 0.5rem; /* rounded-lg */
+  background: #ffffff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.profile-phone-input:focus-within {
+  border-color: #06b6d4; /* cyan-500 */
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
+}
+
+.profile-phone-input .PhoneInputCountry {
+  margin-right: 0.6rem;
+}
+
+.profile-phone-input .PhoneInputInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+  color: #0f172a; /* text-slate-900 */
+  background: transparent;
+}
+
+.profile-phone-input .PhoneInputInput::placeholder {
+  color: #94a3b8; /* placeholder-slate-400 */
+}

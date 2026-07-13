@@ -23,16 +23,17 @@ app.use(
 );
 // Health check
 app.get("/test", (req, res) => {
-  res.send("✅ Backend server is running");
+  res.send(" Backend server is running");
 });
 
 // Import routes
 const user = require("./controller/auth");
 const resume = require("./controller/resume");
-
+const admin = require("./controller/admin");
 // Mount routes
 app.use("/api/v2/user", user);
 app.use("/api/v2/resume", resume);
+app.use("/api/v2/admin", admin);
 
 // Error Handler (must come last)
 app.use(ErrorHandler);

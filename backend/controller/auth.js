@@ -8,57 +8,59 @@ const sendToken = require("../utils/jwtToken");
 const { isAuthenticated } = require("../middleware/auth");
 
 // create user
-router.post("/create-user",
-    catchAsyncErrors(async (req, res, next) =>  {
-  try {
-    const { name, email, password, avatar } = req.body;
+router.post(
+  "/create-user",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const { name, email, password, avatar } = req.body;
 
-    const userEmail = await User.findOne({ email });
+      const userEmail = await User.findOne({ email });
 
-    if (userEmail) {
-      return next(new ErrorHandler("User already exists", 400));
-    }
+      if (userEmail) {
+        return next(new ErrorHandler("User already exists", 400));
+      }
 
-    let avatarData = {};
+      let avatarData = {};
 
-    // Upload only if avatar is provided
-    if (avatar) {
-      const myCloud = await cloudinary.v2.uploader.upload(avatar, {
-        folder: "avatars",
+      // Upload only if avatar is provided
+      if (avatar) {
+        const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+          folder: "avatars",
+        });
+
+        avatarData = {
+          public_id: myCloud.public_id,
+          url: myCloud.secure_url,
+        };
+      }
+
+      const user = await User.create({
+        name,
+        email,
+        password,
+        avatar: avatarData,
       });
 
-      avatarData = {
-        public_id: myCloud.public_id,
-        url: myCloud.secure_url,
-      };
+      const token = user.getJwtToken();
+
+      res.status(201).json({
+        success: true,
+        token,
+        user,
+      });
+    } catch (error) {
+      console.error("SIGNUP ERROR:", error);
+      return next(new ErrorHandler(error.message, 400));
     }
-
-    const user = await User.create({
-      name,
-      email,
-      password,
-      avatar: avatarData,
-    });
-
-    const token = user.getJwtToken();
-
-    res.status(201).json({
-      success: true,
-      token,
-      user,
-    });
-  } catch (error) {
-     console.error("SIGNUP ERROR:", error);
-    return next(new ErrorHandler(error.message, 400));
-  }
-})
+  }),
 );
 // login user
 router.post(
   "/login-user",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const { email, password } = req.body;
+      //const { email, password } = req.body;
+      const { email, password, rememberMe } = req.body;
 
       if (!email || !password) {
         return next(new ErrorHandler("Please provide the all fields!", 400));
@@ -74,15 +76,24 @@ router.post(
 
       if (!isPasswordValid) {
         return next(
-          new ErrorHandler("Please provide the correct information", 400)
+          new ErrorHandler("Please provide the correct information", 400),
         );
       }
 
-      sendToken(user, 201, res);
+      if (!user.isActive) {
+        return next(
+          new ErrorHandler(
+            "Your account has been disabled. From Admin",
+            403,
+          ),
+        );
+      }
+      //sendToken(user, 201, res);
+      sendToken(user, 201, res, !!rememberMe);
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }
-  })
+  }),
 );
 
 // load logged-in user
@@ -100,7 +111,7 @@ router.get(
       success: true,
       user,
     });
-  })
+  }),
 );
 
 // logout
@@ -116,7 +127,7 @@ router.get(
       success: true,
       message: "Logged out successfully!",
     });
-  })
+  }),
 );
 
 // update user info (name, email, phone)
@@ -142,7 +153,7 @@ router.put(
       success: true,
       user,
     });
-  })
+  }),
 );
 
 // update avatar
@@ -175,7 +186,7 @@ router.put(
       success: true,
       user,
     });
-  })
+  }),
 );
 
 // update password
@@ -191,7 +202,7 @@ router.put(
 
     if (newPassword.length < 4) {
       return next(
-        new ErrorHandler("New password must be at least 4 characters", 400)
+        new ErrorHandler("New password must be at least 4 characters", 400),
       );
     }
 
@@ -214,9 +225,7 @@ router.put(
       success: true,
       message: "Password updated successfully",
     });
-  })
+  }),
 );
 
 module.exports = router;
-
-

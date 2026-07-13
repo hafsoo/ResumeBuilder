@@ -5,6 +5,7 @@ import Profile from './../pages/Profile';
 import ResumeForm from './../pages/ResumeForm';
 import ResumeDashboard from './../pages/ResumeDashboard';
 import ResumePreview from './../pages/ResumePreview';
+import AdminDashboard from './../pages/AdminDashboard';
 
 export{
  LoginPage,
@@ -13,5 +14,6 @@ export{
  Profile,
  ResumeForm,
  ResumeDashboard,
- ResumePreview
+ ResumePreview,
+ AdminDashboard
 }

@@ -58,3 +58,13 @@ export const deleteResume = (id) => async (dispatch) => {
   await axios.delete(`${server}/resume/${id}`, { withCredentials: true });
   dispatch({ type: "DeleteResumeSuccess", payload: id });
 };
+
+
+export const sendResumeByEmail = (id, recipientEmail, message) => async (dispatch) => {
+  const { data } = await axios.post(
+    `${server}/resume/${id}/send-email`,
+    { recipientEmail, message },
+    { withCredentials: true }
+  );
+  return data;
+};

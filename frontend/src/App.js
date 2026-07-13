@@ -11,6 +11,7 @@ import {
   ResumeForm,
   ResumeDashboard,
   ResumePreview,
+  AdminDashboard,
 } from "./routes/Routes";
 import { useDispatch } from "react-redux";
 import { loadUser } from "./redux/actions/user";
@@ -32,6 +33,7 @@ function App() {
         <Route path="/resume/:id/edit" element={<ResumeForm />} />
         <Route path="/dashboard" element={<ResumeDashboard />} />
         <Route path="/resume/:id/preview" element={<ResumePreview/>} />
+        <Route path="/admin/dashboard" element={<AdminDashboard/>} />
       </Routes>
 
       <ToastContainer
