@@ -6,6 +6,8 @@ import ResumeForm from './../pages/ResumeForm';
 import ResumeDashboard from './../pages/ResumeDashboard';
 import ResumePreview from './../pages/ResumePreview';
 import AdminDashboard from './../pages/AdminDashboard';
+import EditorPage from './../pages/EditorPage';
+import ATSChecker from './../pages/ATSChecker';
 
 export{
  LoginPage,
@@ -15,5 +17,7 @@ export{
  ResumeForm,
  ResumeDashboard,
  ResumePreview,
- AdminDashboard
+ AdminDashboard,
+ EditorPage,
+ ATSChecker
 }

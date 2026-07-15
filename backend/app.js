@@ -30,10 +30,13 @@ app.get("/test", (req, res) => {
 const user = require("./controller/auth");
 const resume = require("./controller/resume");
 const admin = require("./controller/admin");
+const atsCheck = require("./controller/atsCheck");
+
 // Mount routes
 app.use("/api/v2/user", user);
 app.use("/api/v2/resume", resume);
 app.use("/api/v2/admin", admin);
+app.use("/api/v2/ats", atsCheck);
 
 // Error Handler (must come last)
 app.use(ErrorHandler);

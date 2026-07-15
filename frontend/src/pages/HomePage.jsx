@@ -7,6 +7,8 @@ import HowItWorks from "../components/HowItWorks";
 import Testimonials from "../components/Testimonials";
 import GetHiredBanner from "../components/GetHiredBanner";
 import Footer from "../components/Footer";
+import TemplatesSection from "../components/TemplatesSection";
+import AtsCheckerSection from "../components/AtsCheckerSection";
 
 function HomePage() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -19,7 +21,9 @@ function HomePage() {
         onCreateClick={() => setModalOpen(true)}
         onViewClick={() => navigate("/dashboard")}
       />
+      <TemplatesSection/>
       <HowItWorks/>
+      <AtsCheckerSection/>
       <Testimonials/>
       <GetHiredBanner/>
       <Footer/>

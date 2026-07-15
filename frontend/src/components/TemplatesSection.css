@@ -1,0 +1,216 @@
+/* ---- Palette ----
+   Deep teal:      #0F6C5C  (primary accent, matches your sidebar template)
+   Ink:            #1F2933  (text)
+   Warm paper:     #F7F6F2  (section background)
+   Mist:           #E7EDEC  (card / mock background)
+   Coral pop:      #E8635A  (used sparingly, only on the customize button)
+------------------------------------------------------------------ */
+
+.templates-section {
+  background: #F7F6F2;
+  padding: 88px 24px 96px;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.templates-header {
+  max-width: 620px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.templates-header .eyebrow {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0F6C5C;
+  margin-bottom: 12px;
+}
+
+.templates-header h2 {
+  font-size: 34px;
+  font-weight: 700;
+  color: #1F2933;
+  margin: 0 0 12px;
+  letter-spacing: -0.01em;
+}
+
+.templates-header p {
+  font-size: 16px;
+  color: #5B6570;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ---- Slider shell ---- */
+.templates-slider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.templates-track {
+  display: flex;
+  gap: 28px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 8px 4px 24px;
+  scrollbar-width: none;
+}
+.templates-track::-webkit-scrollbar { display: none; }
+
+.nav-arrow {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid #D8DEDC;
+  background: #fff;
+  color: #1F2933;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  z-index: 2;
+}
+.nav-arrow:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(15, 108, 92, 0.15);
+}
+.nav-arrow:disabled { opacity: 0.35; cursor: default; }
+.nav-arrow--left { margin-right: -22px; }
+.nav-arrow--right { margin-left: -22px; }
+
+/* ---- Card ---- */
+.template-card {
+  flex: 0 0 auto;
+  width: 280px;
+  scroll-snap-align: center;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  opacity: 0.7;
+}
+.template-card.is-active { opacity: 1; transform: translateY(-4px); }
+
+.template-preview {
+  position: relative;
+  width: 100%;
+  height: 360px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #E3E8E6;
+  box-shadow: 0 6px 18px rgba(31, 41, 51, 0.06);
+}
+
+.preview-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 108, 92, 0.0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+.template-preview:hover .preview-overlay {
+  opacity: 1;
+  background: rgba(15, 30, 27, 0.45);
+}
+
+.customize-btn {
+  background: #E8635A;
+  color: #fff;
+  border: none;
+  padding: 11px 26px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transform: translateY(6px);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.template-preview:hover .customize-btn { transform: translateY(0); }
+.customize-btn:hover { background: #d94f45; }
+
+.template-meta { margin-top: 14px; text-align: center; }
+.template-meta h3 { font-size: 17px; font-weight: 700; color: #1F2933; margin: 0 0 4px; }
+.template-meta p { font-size: 13px; color: #7A8288; margin: 0; }
+
+/* ---- Dots ---- */
+.templates-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: #D8DEDC;
+  cursor: pointer;
+  padding: 0;
+}
+.dot.is-active { background: #0F6C5C; width: 22px; border-radius: 5px; }
+
+/* =========================================================
+   Mock resume previews (pure CSS, swap for real images later)
+   ========================================================= */
+.mock { width: 100%; height: 100%; padding: 22px; box-sizing: border-box; }
+
+.mock-name {
+  width: 62%; height: 16px; border-radius: 3px;
+  background: #1F2933; margin-bottom: 8px;
+}
+.mock-line {
+  height: 8px; border-radius: 3px; background: #DCE2E0; margin-bottom: 8px;
+}
+.mock-line.light { background: rgba(255,255,255,0.55); }
+.mock-section-title {
+  width: 40%; height: 10px; border-radius: 3px;
+  background: #0F6C5C; margin: 14px 0 8px;
+}
+.w-50 { width: 50%; } .w-60 { width: 60%; } .w-70 { width: 70%; }
+.w-80 { width: 80%; } .w-85 { width: 85%; } .w-90 { width: 90%; }
+
+/* ATS: single column, no color, generous whitespace */
+.mock--ats { background: #fff; }
+
+/* Tabular: two boxed columns like your Executive template */
+.mock--tabular { background: #fff; }
+.mock-grid { display: flex; gap: 14px; margin-top: 10px; }
+.mock-col {
+  flex: 1; background: #F3F6F5; border-radius: 8px; padding: 10px;
+}
+.mock-box-title {
+  width: 55%; height: 8px; border-radius: 3px; background: #0F6C5C; margin-bottom: 8px;
+}
+.mock-chip {
+  display: inline-block; width: 46%; height: 14px; border-radius: 4px;
+  background: #D6EAE6; margin: 0 4px 6px 0;
+}
+.mock-chip.light { background: rgba(255,255,255,0.35); }
+
+/* Sidebar + photo, like your teal example */
+.mock--sidebar { display: flex; padding: 0; height: 100%; }
+.mock-sidebar {
+  width: 38%; background: #0F6C5C; padding: 20px 14px;
+  display: flex; flex-direction: column; align-items: center;
+}
+.mock-avatar {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: rgba(255,255,255,0.7); margin-bottom: 14px;
+}
+.mock-main { flex: 1; padding: 20px 16px; }
+
+@media (max-width: 640px) {
+  .nav-arrow { display: none; }
+  .template-card { width: 78vw; }
+}
