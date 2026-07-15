@@ -17,7 +17,8 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "20mb" }));
 // Enable CORS for frontend
 app.use(
   cors({
-     origin: "http://localhost:3000",
+    // origin: "http://localhost:3000",
+    origin: process.env.FRONTEND_URL || "http://localhost:3000",
     credentials:true,
 })
 );

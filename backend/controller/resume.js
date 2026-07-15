@@ -5,7 +5,10 @@ const cloudinary = require("cloudinary"); // NEW
 const ErrorHandler = require("../utils/ErrorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const { isAuthenticated } = require("../middleware/auth");
-const puppeteer = require("puppeteer");
+//const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
+const chromium = require("@sparticuz/chromium");
+
 const sendMail = require("../utils/sendMail");
 
 // create a new resume
@@ -369,17 +372,23 @@ router.post(
     `;
 
     // PDF generate karo resume HTML se
+    //const browser = await puppeteer.launch({
+    // headless: true,
+    //args: [
+    // "--no-sandbox",
+    //"--disable-setuid-sandbox",
+    //"--disable-gpu",
+    //"--disable-dev-shm-usage",
+    //"--disable-software-rasterizer",
+    //"--window-position=-32000,-32000",
+    //"--window-size=1,1",
+    //],
+    //});
     const browser = await puppeteer.launch({
-      headless: true,
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-gpu",
-        "--disable-dev-shm-usage",
-        "--disable-software-rasterizer",
-        "--window-position=-32000,-32000",
-        "--window-size=1,1",
-      ],
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless,
     });
 
     const page = await browser.newPage();
@@ -408,7 +417,7 @@ router.post(
         message: `Resume sent to ${recipientEmail}`,
       });
     } catch (error) {
-      console.error("SEND MAIL ERROR:", error); 
+      console.error("SEND MAIL ERROR:", error);
       return next(
         new ErrorHandler("Could not send email, please try again", 500),
       );
@@ -819,4 +828,3 @@ router.post(
 module.exports = router;
 
 */
-
