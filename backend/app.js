@@ -1,5 +1,6 @@
 // Load environment config in dev
-if (process.env.NODE_ENV !== "PRODUCTION") {
+//if (process.env.NODE_ENV !== "PRODUCTION") {
+if (process.env.NODE_ENV?.toLowerCase() !== "production") {
   require("dotenv").config({ path: "config/.env" });
 }
 const express = require("express");
@@ -18,7 +19,8 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "20mb" }));
 app.use(
   cors({
     // origin: "http://localhost:3000",
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    //origin: "https://resume-builder-frontend-six-alpha.vercel.app" || "http://localhost:3000",
+      origin: ["https://resume-builder-frontend-six-alpha.vercel.app"],
     credentials:true,
 })
 );
